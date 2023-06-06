@@ -2,7 +2,7 @@
  * @Description:
  * @Author: yeeChen
  * @Date: 2023-06-05 17:03:42
- * @LastEditTime: 2023-06-06 17:35:46
+ * @LastEditTime: 2023-06-06 18:13:41
  * @LastEditors: yeeChen
  */
 import { app, BrowserWindow, ipcMain } from "electron";

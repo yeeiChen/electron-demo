@@ -2,7 +2,7 @@
  * @Description:
  * @Author: yeeChen
  * @Date: 2023-06-05 16:55:10
- * @LastEditTime: 2023-06-06 17:18:59
+ * @LastEditTime: 2023-06-06 18:21:14
  * @LastEditors: yeeChen
  */
 import { defineConfig } from "vite";

@@ -1,18 +1,67 @@
-# Vue 3 + TypeScript + Vite
+<!--
+ * @Description:
+ * @Author: yeeChen
+ * @Date: 2023-06-05 16:55:10
+ * @LastEditTime: 2023-06-06 18:32:48
+ * @LastEditors: yeeChen
+-->
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+# electron demo
 
-## Recommended IDE Setup
+## bug 记录
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+关于 npm i:由于某不可抗拒因素,我们初次下载或者打包时速度会极慢,我们可以采取以下两者方法,推荐后者
 
-## Type Support For `.vue` Imports in TS
+1.配置环境
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+2.开飞机
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+---
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+1.最新版本通过 vite 创建 electron 不需要在插件配置中申明 main 模块
+
+<!-- vite.config.ts -->
+
+```js
+export default defineConfig({
+  plugins: [
+    vue(),
+    electron({
+      entry: "electron/index.ts",
+    }),
+  ],
+});
+```
+
+2.通过 isPackaged 判断环境打包后依旧会白屏,但是我看 issue 貌似是已经解决了这个问题。我们可以通过 process.env.NODE_ENV 来判断环境
+
+<!-- electron/index.ts -->
+
+```js
+if (process.env.NODE_ENV != "development") {
+  win.loadFile(path.join(__dirname, "..", "dist/index.html"));
+} else {
+  win.loadURL(`${process.env["VITE_DEV_SERVER_URL"]}`);
+}
+```
+
+3.electron 的最新版本中打包生成的文件名为 dist-electron,因此入口文件的路径要改
+
+<!-- package.json -->
+
+```js
+"main": "dist-electron/index.js",
+```
+
+4.打包后生成的文件正常配置打开会出现 Can't find module ...(dist-electron/index.ts)的报错,需要改变打包时加入的文件
+
+<!-- package.json -->
+
+```js
+   "files": [
+      "dist",
+      "dist-electron/index.js"
+    ],
+```
+
+5.我第一次运行的时候出现了 electron 配置的环境错误相关的报错,注意 devDependencies(开发) 和 dependencies(项目运行) 两者环境的区别
