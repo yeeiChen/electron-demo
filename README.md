@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!--
  * @Description:
  * @Author: yeeChen
@@ -66,7 +65,3 @@ if (process.env.NODE_ENV != "development") {
 ```
 
 5.我第一次运行的时候出现了 electron 配置的环境错误相关的报错,注意 devDependencies(开发) 和 dependencies(项目运行) 两者环境的区别
-=======
-# electron-demo
-electron demo
->>>>>>> 9f0a0729ba1c41159a43edf9811ac62697fb89c7
